@@ -1,6 +1,6 @@
-class GameState extends Phaser.State {
+class Play extends Phaser.State {
 
-	constructor() {
+  constructor() {
 		super();
 		this.platforms = null;
 		this.player = null;
@@ -10,19 +10,8 @@ class GameState extends Phaser.State {
 		this.scoreText = null;
 	}
 
-	preload() {
-		console.log("preload()");
-		this.game.load.image('sky', 'assets/sky.png');
-		this.game.load.image('ground', 'assets/platform.png');
-		this.game.load.image('star', 'assets/star.png');
-		this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-	}
-
-	create() {
-		console.log("create()")
-		let center = { x: this.game.world.centerX, y: this.game.world.centerY }
-
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+  create() {
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.add.sprite(0, 0, 'sky');
 
 		this.platforms = this.game.add.group();
@@ -58,11 +47,12 @@ class GameState extends Phaser.State {
 		this.scoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000'});
 
 		this.cursors = this.game.input.keyboard.createCursorKeys();
-	}
 
-	update() {
-		//console.log('update()');
-		this.game.physics.arcade.collide(this.stars, this.platforms);
+  }
+
+  update() {
+
+    this.game.physics.arcade.collide(this.stars, this.platforms);
 		this.game.physics.arcade.collide(this.player, this.platforms);
 		this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
 		this.player.body.velocity.x = 0;
@@ -81,13 +71,14 @@ class GameState extends Phaser.State {
 		if (this.cursors.up.isDown && this.player.body.touching.down) {
 			this.player.body.velocity.y = -350;
 		}
-	}
 
-	collectStar(player, star) {
+  }
+
+  collectStar(player, star) {
 		star.kill();
 		this.score += 10;
 		this.scoreText.text = 'Score: ' + this.score;
 	}
 }
 
-export default GameState;
+export default Play;
